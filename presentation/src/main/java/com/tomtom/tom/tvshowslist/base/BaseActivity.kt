@@ -1,13 +1,15 @@
-package com.tomtom.tom.tvshowslist
+package com.tomtom.tom.tvshowslist.base
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity(), Navigator {
+
+    override fun navigateTo(fragment: String) {
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
     }
-
 }

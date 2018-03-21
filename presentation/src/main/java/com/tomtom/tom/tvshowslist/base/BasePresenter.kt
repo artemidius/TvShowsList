@@ -4,7 +4,7 @@ import android.content.Context
 import com.tomtom.tom.tvshowslist.application.TvShowsListApplication
 import javax.inject.Inject
 
-class BasePresenter {
+open class BasePresenter {
     @Inject
     lateinit var context: Context
 
