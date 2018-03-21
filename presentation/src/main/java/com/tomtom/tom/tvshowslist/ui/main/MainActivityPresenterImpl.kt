@@ -4,11 +4,11 @@ import android.util.Log
 import com.tomtom.tom.tvshowslist.base.BasePresenter
 
 
-class MainActivityPresenterImpl(private val mainActivity: MainActivity) : BasePresenter(), MainActivityContract.Presenter {
+class MainActivityPresenterImpl(private val mainActivity: MainActivity?) : BasePresenter(), MainActivityContract.Presenter {
 
     val tag = this.javaClass.simpleName
+    val view: MainActivityContract.View? = mainActivity
 
-    val view: MainActivityContract.View = mainActivity
 
 
     override fun onResume()   {  Log.d(tag, "Activity triggered onPause()")     }

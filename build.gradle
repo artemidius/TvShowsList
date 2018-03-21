@@ -13,6 +13,7 @@ buildscript {
     ext.espresso_version = '2.2.2'
     ext.runner_version = '1.0.1'
     ext.mockito_version = '1.10.19'
+    ext.roboelectric_version = '3.8'
 
     //third-party
     ext.dagger_version = '2.14.1'
@@ -28,6 +29,7 @@ buildscript {
             junit:              "junit:junit:${junit_version}",
             espresso:           "com.android.support.test.espresso:espresso-core:${espresso_version}",
             mockito:            "org.mockito:mockito-core:${mockito_version}",
+            roboelectric:       "org.robolectric:robolectric:${roboelectric_version}",
             runner:             "com.android.support.test:runner:${runner_version}",
             annotations:        "com.android.support:support-annotations:${support_version}",
             rules:              "com.android.support.test:rules:${runner_version}"
