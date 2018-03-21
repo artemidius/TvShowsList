@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 26
+
+
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+
+dependencies {
+
+    def testDependencies = rootProject.ext.testDependencies
+    def googleDependencies = rootProject.ext.googleDependencies
+    def thirdPartyDependencies = rootProject.ext.thirdPartyDependencies
+
+    //kotlin
+    implementation googleDependencies.kotlin
+    compile googleDependencies.anko
+
+    //tests
+    testImplementation testDependencies.junit
+    androidTestImplementation testDependencies.espresso
+    androidTestImplementation testDependencies.runner
+    androidTestImplementation testDependencies.annotations
+    androidTestImplementation testDependencies.rules
+    androidTestImplementation testDependencies.mockito
+
+    //third-party
+    compile thirdPartyDependencies.rxjava
+    compile thirdPartyDependencies.picasso
+
+
+
+
+
+    compile project(':domain')
+}
+repositories {
+    mavenCentral()
+}

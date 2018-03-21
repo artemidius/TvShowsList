@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.tomtom.tom.tvshowslist"
+        minSdkVersion 17
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+kapt {
+    generateStubs = true
+}
+
+dependencies {
+
+    def testDependencies = rootProject.ext.testDependencies
+    def googleDependencies = rootProject.ext.googleDependencies
+    def thirdPartyDependencies = rootProject.ext.thirdPartyDependencies
+
+
+    //kotlin
+    implementation googleDependencies.kotlin
+
+    //google
+    implementation googleDependencies.appcompat
+    implementation googleDependencies.recyclerview
+    implementation googleDependencies.constraint
+    implementation googleDependencies.support
+    implementation googleDependencies.design
+
+    //dagger 2
+    compile thirdPartyDependencies.dagger
+    compile thirdPartyDependencies.dagger_android
+    compile thirdPartyDependencies.dagger_support
+    kapt thirdPartyDependencies.anno_proc
+    kapt thirdPartyDependencies.anno_proc_android
+
+
+    compile project(':data')
+}
+repositories {
+    mavenCentral()
+}
