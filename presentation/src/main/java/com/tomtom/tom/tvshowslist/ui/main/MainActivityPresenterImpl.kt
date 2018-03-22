@@ -14,6 +14,7 @@ import com.tomtom.tom.tvshowslist.base.BasePresenter
 class MainActivityPresenterImpl(mainActivity: MainActivity?) : BasePresenter(), MainActivityContract.Presenter, Interactor.Presentation {
 
 
+
     private val tag = this.javaClass.simpleName
     private val view: MainActivityContract.View? = mainActivity
     private val downloadMoviesUseCase: DownloadMoviesUseCase = DownloadMoviesUseCaseImpl()
@@ -31,12 +32,28 @@ class MainActivityPresenterImpl(mainActivity: MainActivity?) : BasePresenter(), 
     companion object {
         var currentPage:Int = 0
         var moviesList = mutableListOf<Movie>()
+        var downloadRetryCount = 0
+        val maximumDownloadAttemptNumber = 3
     }
 
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
+        downloadRetryCount = 0
         currentPage = response.page
         moviesList.addAll(response.results)
         view?.onDataUpdate(moviesList)
+    }
+
+    override fun onMoviesPageDownloadFailed(error: Throwable) {
+        Log.d(tag, "Page download failed with error: ${error.message}")
+        if (downloadRetryCount < 4) {
+            downloadRetryCount++
+            Log.d(tag, "Retry download. Attempt #$downloadRetryCount")
+            downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
+        } else {
+            Log.d(tag, "We tried too many times. Download aborted")
+            //TODO: Handle UX for different give-up situations
+            view?.onDataUpdate(moviesList)
+        }
     }
 
     override fun downloadNextPage() = downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
