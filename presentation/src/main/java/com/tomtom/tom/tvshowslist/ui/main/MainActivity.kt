@@ -1,6 +1,7 @@
 package com.tomtom.tom.tvshowslist.ui.main
 
 import android.os.Bundle
+import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.base.BaseActivity
 
@@ -19,6 +20,6 @@ class MainActivity : BaseActivity(), MainActivityContract.View {
         presenter.onResume()
     }
 
-    override fun onDataUpdate() {    }
+    override fun onDataUpdate(movies: List<Movie>) {    }
 
 }

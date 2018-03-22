@@ -6,7 +6,7 @@ import io.reactivex.Single
 interface Interactor {
 
     interface Presentation {
-        fun onMoviesDownloaded(response: MoviesResponse)
+        fun onMoviesPageDownloaded(response: MoviesResponse)
     }
 
     interface Backend {
