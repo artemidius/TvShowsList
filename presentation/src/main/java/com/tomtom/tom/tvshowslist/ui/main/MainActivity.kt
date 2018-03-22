@@ -7,7 +7,9 @@ import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.base.BaseActivity
 import com.tomtom.tom.tvshowslist.base.BaseFragment
 import com.tomtom.tom.tvshowslist.base.Navigator
+import com.tomtom.tom.tvshowslist.base.Navigator.Companion.DETAILS_FRAGMENT
 import com.tomtom.tom.tvshowslist.base.Navigator.Companion.LIST_FRAGMENT
+import com.tomtom.tom.tvshowslist.ui.detail.DetailFragment
 import com.tomtom.tom.tvshowslist.ui.list.MoviesListFragment
 
 class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
@@ -16,6 +18,7 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
 
     private val navigator: Navigator = this
     private val listFragment = MoviesListFragment()
+    private val detailFragment = DetailFragment()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +26,7 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
         setContentView(R.layout.activity_main)
 
         listFragment.navigator = navigator
+        detailFragment.navigator = navigator
 
         presenter.onCreate()
 
@@ -38,7 +42,8 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
         super.navigateTo(fragment)
 
         when (fragment) {
-            LIST_FRAGMENT -> addFragment(listFragment as BaseFragment)
+            LIST_FRAGMENT -> addFragment(listFragment)
+            DETAILS_FRAGMENT -> addFragment(detailFragment)
             else -> Log.d(this.javaClass.simpleName, "Unknown fragment to navigate")
         }
 

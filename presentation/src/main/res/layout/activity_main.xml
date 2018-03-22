@@ -6,6 +6,7 @@
     android:id="@+id/fragments_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight"
     tools:context="com.tomtom.tom.tvshowslist.ui.main.MainActivity">
 
 </android.support.constraint.ConstraintLayout>

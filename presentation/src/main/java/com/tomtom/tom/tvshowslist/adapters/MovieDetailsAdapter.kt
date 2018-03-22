@@ -9,10 +9,11 @@ import com.squareup.picasso.Picasso
 import com.tomtom.tom.data.backend.retrofit.RetrofitHelper
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.tvshowslist.R
+import com.tomtom.tom.tvshowslist.ui.detail.MovieDetailsContract
 import com.tomtom.tom.tvshowslist.ui.list.MoviesListContract
 import kotlinx.android.synthetic.main.item_show.view.*
 
-class MoviesListAdapter(var movies: List<Movie>, val presenter:MoviesListContract.Presenter) : RecyclerView.Adapter<MoviesListAdapter.ViewHolder>() {
+class MovieDetailsAdapter(var movies: List<Movie>, val presenter:MovieDetailsContract.Presenter) : RecyclerView.Adapter<MovieDetailsAdapter.ViewHolder>() {
 
     lateinit var context: Context
     val baseUrl = "https://image.tmdb.org/t/p/w200"
@@ -44,7 +45,7 @@ class MoviesListAdapter(var movies: List<Movie>, val presenter:MoviesListContrac
 
     override fun getItemCount(): Int = movies.size
 
-    class ViewHolder(val textView: View, val presenter:MoviesListContract.Presenter) : RecyclerView.ViewHolder(textView), View.OnClickListener {
+    class ViewHolder(val textView: View, val presenter:MovieDetailsContract.Presenter) : RecyclerView.ViewHolder(textView), View.OnClickListener {
 
         var movie:Movie? = null
 
