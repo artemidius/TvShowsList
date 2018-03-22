@@ -19,6 +19,7 @@ buildscript {
     ext.dagger_version = '2.14.1'
     ext.rxjava_version = '2.0.1'
     ext.picasso_version = '2.5.2'
+    ext.retrofit_version = '2.4.0'
 
     repositories {
         google()
@@ -55,7 +56,10 @@ buildscript {
             anno_proc:         "com.google.dagger:dagger-compiler:${dagger_version}",
             anno_proc_android: "com.google.dagger:dagger-android-processor:${dagger_version}",
 
+            retrofit:          "com.squareup.retrofit2:retrofit:${retrofit_version}",
+            retrofit_gson:    "com.squareup.retrofit2:converter-gson:${retrofit_version}",
             rxjava:            "io.reactivex.rxjava2:rxandroid:${rxjava_version}",
+            retrofit_rx:       "com.squareup.retrofit2:adapter-rxjava2:${retrofit_version}",
             picasso:           "com.squareup.picasso:picasso:${picasso_version}"
     ]
 

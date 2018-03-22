@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        OKAY, OKAY, OKAY
+        I know that hardcoding a secret is totally illegal.
+        I do it as an exception for a test work
+    -->
+
+    <string name="api_key">03efca6b44cca9b9ad1f94f8b03250db</string>
+</resources>

@@ -26,13 +26,23 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    def testDependencies = rootProject.ext.testDependencies
+    def googleDependencies = rootProject.ext.googleDependencies
+    def thirdPartyDependencies = rootProject.ext.thirdPartyDependencies
+
+    //kotlin
+    implementation googleDependencies.kotlin
+
+    //tests
+    testImplementation testDependencies.junit
+    androidTestImplementation testDependencies.runner
+    androidTestImplementation testDependencies.annotations
+    androidTestImplementation testDependencies.rules
+    androidTestImplementation testDependencies.mockito
+
+    //third-party
+    compile thirdPartyDependencies.rxjava
 }
 repositories {
     mavenCentral()
