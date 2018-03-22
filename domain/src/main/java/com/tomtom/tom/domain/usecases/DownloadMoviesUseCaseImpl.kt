@@ -9,7 +9,10 @@ class DownloadMoviesUseCaseImpl : DownloadMoviesUseCase {
         val nextPage: String = (page + 1).toString()
         backendInteractor.downloadMovies(api_key, nextPage)
                 .doOnError { presentationInteractor.onMoviesPageDownloadFailed(it) }
-                .doOnSuccess { presentationInteractor.onMoviesPageDownloaded(it) }
+                .doOnSuccess {
+                    Thread.sleep(1000)
+                    presentationInteractor.onMoviesPageDownloaded(it)
+                }
                 .subscribe()
     }
 }

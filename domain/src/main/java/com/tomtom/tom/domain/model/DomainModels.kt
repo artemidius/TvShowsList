@@ -11,5 +11,6 @@ class Movie (
         val poster_path:String,
         val backdrop_path:String,
         val overview:String,
+        val id:Int,
         val vote_average:Double
 )
