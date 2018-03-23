@@ -20,7 +20,6 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
     private val listFragment = MoviesListFragment()
     private val detailFragment = DetailFragment()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -31,6 +30,8 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
         presenter.onCreate()
 
         navigateTo(LIST_FRAGMENT)
+
+        title = getString(R.string.list_screen_title)
     }
 
     override fun onResume() {

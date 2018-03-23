@@ -7,6 +7,7 @@ import com.tomtom.tom.tvshowslist.base.ActivityLifeCyclePresenter
 interface MoviesListContract {
     interface View {
         fun onDataUpdate(movies:List<Movie>)
+        fun onConnectionFailed()
     }
 
     interface Presenter : ActivityLifeCyclePresenter {

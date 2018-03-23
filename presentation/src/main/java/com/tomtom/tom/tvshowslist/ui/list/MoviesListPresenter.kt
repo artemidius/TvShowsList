@@ -31,6 +31,7 @@ class MoviesListPresenter(listFragment: MoviesListFragment) : BasePresenter(), M
         var moviesList = mutableListOf<Movie>()
         var downloadRetryCount = 0
         const val maximumDownloadAttemptNumber = 3
+
     }
 
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
@@ -39,7 +40,6 @@ class MoviesListPresenter(listFragment: MoviesListFragment) : BasePresenter(), M
         downloadRetryCount = 0
         currentPage = response.page
         moviesList.addAll(response.results)
-
         view?.onDataUpdate(moviesList)
     }
 
@@ -48,7 +48,7 @@ class MoviesListPresenter(listFragment: MoviesListFragment) : BasePresenter(), M
         if (downloadRetryCount <= maximumDownloadAttemptNumber) {
             downloadRetryCount++
             Log.d(tag, "Retry download. Attempt #$downloadRetryCount")
-            downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
+            downloadNextPage()
         } else {
             Log.d(tag, "We tried too many times. Download aborted")
             //TODO: Handle UX for different give-up situations
@@ -60,7 +60,11 @@ class MoviesListPresenter(listFragment: MoviesListFragment) : BasePresenter(), M
         Log.d(tag, movie?.original_name)
     }
 
-    override fun downloadNextPage() = downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
+    override fun downloadNextPage()  {
+        if (application.hasInternetAccess()){
+            downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
+        } else view?.onConnectionFailed()
+    }
 
     override fun onViewCreated()  {
         Log.d(tag, "Fragment triggered onViewCreated()")
@@ -73,5 +77,6 @@ class MoviesListPresenter(listFragment: MoviesListFragment) : BasePresenter(), M
     override fun onPause()        {  Log.d(tag, "Fragment triggered onPause()")     }
     override fun onDestroy()      {  Log.d(tag, "Fragment triggered onDestroy()")   }
     override fun onStop()         {  Log.d(tag, "Fragment triggered onStop()")      }
+
 }
 

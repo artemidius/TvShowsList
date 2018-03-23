@@ -22,7 +22,6 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
     val tagg = this.javaClass.simpleName
     var isLoading = false
 
-    lateinit var snackbar: Snackbar
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MovieDetailsAdapter
@@ -36,7 +35,6 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
         super.onViewCreated(view, savedInstanceState)
         initRecycler(view!!)
 
-        snackbar = Snackbar.make(list_container, "Loading...", Snackbar.LENGTH_INDEFINITE)
         presenter.onViewCreated()
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -48,7 +46,6 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
                     Log.d(tag, "MORe")
                     isLoading = true
                     presenter.downloadNextPage()
-                    snackbar.show()
 
                 }
             }
@@ -56,7 +53,7 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
     }
 
     private fun initRecycler(view: View) {
-        recyclerView = view.findViewById(R.id.movies_recycler)
+        recyclerView = view.findViewById(R.id.detail_recycler)
         adapter = MovieDetailsAdapter(emptyList(), presenter)
         layoutManager = CustomGridLayoutManager(view.context,2, 1f)
         recyclerView.layoutManager = layoutManager
@@ -66,7 +63,6 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
 
     override fun onDataUpdate(movies: List<Movie>) {
         Log.d(tag, "Fragment has: ${movies.size}")
-        snackbar.dismiss()
         isLoading = false
         adapter.updateList(movies)
     }

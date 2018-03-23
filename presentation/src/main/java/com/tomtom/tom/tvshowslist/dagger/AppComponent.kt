@@ -1,5 +1,6 @@
 package com.tomtom.tom.tvshowslist.dagger
 
+import com.tomtom.tom.data.backend.BackendHelper
 import com.tomtom.tom.tvshowslist.base.BasePresenter
 import dagger.Component
 import javax.inject.Singleton
@@ -13,4 +14,5 @@ import javax.inject.Singleton
 
 interface AppComponent {
     fun inject(basePresenter: BasePresenter)
+    fun inject(helper: BackendHelper)
 }

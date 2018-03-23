@@ -7,10 +7,14 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
+
 class BackendHelper:Interactor.Backend {
+
     override fun downloadMovies(api_key: String, page: String): Single<MoviesResponse> =
         RetrofitHelper()
                 .getPopularMovies(api_key, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+
+
 }

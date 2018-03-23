@@ -8,6 +8,9 @@ open class BasePresenter {
     @Inject
     lateinit var context: Context
 
+    @Inject
+    lateinit var application: TvShowsListApplication
+
     val TAG = this.javaClass.simpleName
 
     init {
