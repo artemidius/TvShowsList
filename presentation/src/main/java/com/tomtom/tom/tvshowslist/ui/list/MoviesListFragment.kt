@@ -2,6 +2,7 @@ package com.tomtom.tom.tvshowslist.ui.list
 
 
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,13 +14,14 @@ import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.adapters.CustomGridLayoutManager
 import com.tomtom.tom.tvshowslist.adapters.MoviesListAdapter
 import com.tomtom.tom.tvshowslist.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.android.synthetic.main.fragment_list_main_content.*
 
 class MoviesListFragment : BaseFragment(), MoviesListContract.View {
 
     var isLoading = false
 
-    lateinit var snackbar: Snackbar
+    lateinit var bottomSheetBehavior:BottomSheetBehavior<View>
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MoviesListAdapter
@@ -32,7 +34,7 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
         super.onViewCreated(view, savedInstanceState)
         initRecycler(view!!)
 
-        snackbar = Snackbar.make(list_container, getString(R.string.loading), Snackbar.LENGTH_INDEFINITE)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         presenter.onViewCreated()
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -43,7 +45,7 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
                 if (!isLoading && totalItemCount <= lastVisibleItem + 3) {
                     isLoading = true
                     presenter.downloadNextPage()
-                    snackbar.show()
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 }
             }
         })
@@ -54,17 +56,21 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
         adapter = MoviesListAdapter(emptyList(), presenter)
         layoutManager = CustomGridLayoutManager(view.context, 2, 1f)
         recyclerView.layoutManager = layoutManager
-
         recyclerView.adapter = adapter
     }
 
     override fun onDataUpdate(movies: List<Movie>) {
-        snackbar.dismiss()
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         isLoading = false
         adapter.updateList(movies)
     }
 
-    override fun onConnectionFailed() = Snackbar.make(list_container, getString(R.string.connection_failed), Snackbar.LENGTH_INDEFINITE)
-            .setAction(getString(R.string.retry)) { presenter.downloadNextPage() }
-            .show()
+    override fun onConnectionFailed() {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        Snackbar.make(list_container, getString(R.string.connection_failed), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.retry)) {
+                    presenter.downloadNextPage()
+                }
+                .show()
+    }
 }
