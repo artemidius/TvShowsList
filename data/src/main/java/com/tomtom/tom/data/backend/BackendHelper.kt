@@ -9,6 +9,7 @@ import io.reactivex.schedulers.Schedulers
 
 
 class BackendHelper:Interactor.Backend {
+
     override fun downloadSimilar(id: String, api_key: String, page: String): Single<MoviesResponse> =
         RetrofitHelper()
                 .getSimilarMovies(id, api_key, page)
@@ -21,6 +22,5 @@ class BackendHelper:Interactor.Backend {
                 .getPopularMovies(api_key, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-
 
 }

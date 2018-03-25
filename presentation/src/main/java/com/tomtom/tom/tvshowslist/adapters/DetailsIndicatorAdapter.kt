@@ -20,6 +20,7 @@ class DetailsIndicatorAdapter(var movies: List<Movie>, val presenter:MovieDetail
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
+
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_details_indicator, parent, false)
         return ViewHolder(view, presenter)
     }
@@ -43,16 +44,9 @@ class DetailsIndicatorAdapter(var movies: List<Movie>, val presenter:MovieDetail
     override fun getItemCount(): Int = movies.size
 
     class ViewHolder(val textView: View, val presenter:MovieDetailsContract.Presenter) : RecyclerView.ViewHolder(textView), View.OnClickListener {
-
         var pos:Int = 0
-
-        init {
-            textView.setOnClickListener (this)
-        }
-
-        override fun onClick(p0: View?) {
-            presenter.onItemClick(pos)
-        }
+        init { textView.setOnClickListener (this) }
+        override fun onClick(p0: View?) = presenter.onItemClick(pos)
     }
 
     fun updateList(newList: List<Movie>) {

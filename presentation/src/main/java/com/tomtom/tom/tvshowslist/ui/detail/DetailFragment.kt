@@ -44,6 +44,7 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
                 super.onScrolled(recyclerView, dx, dy)
 
                 Log.d(tag, pagerLayoutManager.findFirstVisibleItemPosition().toString())
+                presenter.onPagerSnap(pagerLayoutManager.findFirstVisibleItemPosition())
 
                 val totalItemCount = pagerLayoutManager.getItemCount()
                 val lastVisibleItem: Int = pagerLayoutManager.findLastCompletelyVisibleItemPosition()

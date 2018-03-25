@@ -60,8 +60,13 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
     }
 
     override fun onItemClick(position: Int) {
+        onPagerSnap(position)
         view?.scrollPagerToPosition(position)
 
+    }
+
+    override fun onPagerSnap(position: Int) {
+        detailFragment.activity.title = moviesList[position].original_name
     }
 
     override fun downloadNextPage() = downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)

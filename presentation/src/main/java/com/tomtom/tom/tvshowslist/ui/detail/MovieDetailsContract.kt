@@ -15,6 +15,7 @@ interface MovieDetailsContract {
         fun onViewCreated()
         fun downloadNextPage()
         fun onItemClick(position: Int)
+        fun onPagerSnap(position: Int)
         fun initializeDataset(movie: Movie)
         fun getBaseUrl():String
     }
