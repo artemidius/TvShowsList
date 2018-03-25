@@ -3,11 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingTop="0dp"
-    android:paddingBottom="0dp"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp"
-    android:background="@color/colorPrimaryLight"
+   android:background="@color/colorPrimaryLight"
     tools:context="com.tomtom.tom.tvshowslist.ui.list.MoviesListFragment"
     android:id="@+id/detail_container">
 
@@ -15,6 +11,7 @@
         android:id="@+id/detail_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="16dp"
         />
 
 
