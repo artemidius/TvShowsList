@@ -29,6 +29,7 @@ buildscript {
     ext.testDependencies = [
             junit:              "junit:junit:${junit_version}",
             espresso:           "com.android.support.test.espresso:espresso-core:${espresso_version}",
+            espresso_contrib:   "com.android.support.test.espresso:espresso-contrib:${espresso_version}",
             mockito:            "org.mockito:mockito-core:${mockito_version}",
             roboelectric:       "org.robolectric:robolectric:${roboelectric_version}",
             runner:             "com.android.support.test:runner:${runner_version}",

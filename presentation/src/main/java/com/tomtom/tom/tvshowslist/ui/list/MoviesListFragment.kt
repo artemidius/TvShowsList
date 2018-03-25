@@ -24,7 +24,7 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
     lateinit var bottomSheetBehavior:BottomSheetBehavior<View>
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: MoviesListAdapter
+    lateinit var adapter: MoviesListAdapter
     private lateinit var layoutManager: GridLayoutManager
     private val presenter: MoviesListContract.Presenter = MoviesListPresenter(this)
 

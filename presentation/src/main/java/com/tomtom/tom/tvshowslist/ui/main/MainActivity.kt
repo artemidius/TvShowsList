@@ -17,8 +17,8 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
     private var presenter:MainActivityContract.Presenter = MainActivityPresenter(this)
 
     private val navigator: Navigator = this
-    private val listFragment = MoviesListFragment()
-    private val detailFragment = DetailFragment()
+    val listFragment = MoviesListFragment()
+    val detailFragment = DetailFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
