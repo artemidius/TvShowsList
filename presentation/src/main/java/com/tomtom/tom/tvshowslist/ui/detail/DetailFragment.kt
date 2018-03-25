@@ -1,9 +1,10 @@
 package com.tomtom.tom.tvshowslist.ui.detail
 
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSnapHelper
+import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -35,6 +36,9 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+
+                Log.d(tag, layoutManager.findFirstVisibleItemPosition().toString())
+
                 val totalItemCount = layoutManager.getItemCount()
                 val lastVisibleItem:Int = layoutManager.findLastCompletelyVisibleItemPosition()
                 if (!isLoading && totalItemCount <= lastVisibleItem + 3) {
@@ -51,13 +55,16 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
         layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
-        LinearSnapHelper().attachToRecyclerView(recyclerView)
+        PagerSnapHelper().attachToRecyclerView(recyclerView)
     }
 
     override fun onDataUpdate(movies: List<Movie>) {
         Log.d(tag, "Detail fragment data updated with ${movies.size} shows")
         isLoading = false
-        adapter.updateList(movies)
+        activity.runOnUiThread {
+            adapter.updateList(movies)
+        }
+
 
     }
 

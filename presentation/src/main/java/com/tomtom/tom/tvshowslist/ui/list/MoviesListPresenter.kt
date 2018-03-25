@@ -50,6 +50,7 @@ class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(
 
     override fun onItemClick(movie: Movie?) {
         Log.d(tag, movie?.original_name)
+        Thread.sleep(333)
         listFragment.navigator.navigateTo(Navigator.DETAILS_FRAGMENT, movie)
     }
 
