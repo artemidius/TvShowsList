@@ -7,6 +7,7 @@ import com.tomtom.tom.domain.boundaries.Interactor
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.domain.model.MoviesResponse
 import com.tomtom.tom.domain.usecases.DownloadMoviesUseCaseImpl
+import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.application.TvShowsListApplication.Companion.apiKey
 import com.tomtom.tom.tvshowslist.base.BasePresenter
 import com.tomtom.tom.tvshowslist.base.Navigator
@@ -50,7 +51,7 @@ class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(
 
     override fun onItemClick(movie: Movie?) {
         Log.d(tag, movie?.original_name)
-        Thread.sleep(333)
+        Thread.sleep(500)
         listFragment.navigator.navigateTo(Navigator.DETAILS_FRAGMENT, movie)
     }
 
@@ -62,6 +63,7 @@ class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(
 
     override fun onViewCreated()  {
         Log.d(tag, "Fragment triggered onViewCreated()")
+        listFragment.activity.title = context.getString(R.string.list_screen_title)
         downloadNextPage()
     }
 

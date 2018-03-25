@@ -7,6 +7,7 @@ import com.tomtom.tom.domain.boundaries.Interactor
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.domain.model.MoviesResponse
 import com.tomtom.tom.domain.usecases.DownloadSimilarUseCaseImpl
+import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.application.TvShowsListApplication.Companion.apiKey
 import com.tomtom.tom.tvshowslist.application.TvShowsListApplication.Companion.baseUrl
 import com.tomtom.tom.tvshowslist.base.BasePresenter
@@ -60,14 +61,13 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
         }
     }
 
-    override fun onItemClick(movie: Movie?) {
-        Log.d(tag, movie?.original_name)
-    }
+    override fun onItemClick(movie: Movie?) { }
 
     override fun downloadNextPage() = downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
 
     override fun onViewCreated()  {
         Log.d(tag, "Fragment triggered onViewCreated()")
+        detailFragment.activity.title = moviesList[0].original_name
         downloadNextPage()
     }
 

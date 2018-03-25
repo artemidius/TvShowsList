@@ -23,6 +23,7 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
 
         listFragment.navigator = navigator
         detailFragment.navigator = navigator
@@ -31,7 +32,6 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
 
         navigateTo(LIST_FRAGMENT)
 
-        title = getString(R.string.list_screen_title)
     }
 
     override fun onResume() {
@@ -46,7 +46,6 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
             LIST_FRAGMENT -> addFragment(listFragment)
             DETAILS_FRAGMENT -> {
                 if(movie != null) {
-                    title = movie.original_name
                     addFragment(detailFragment)
                     detailFragment.presenter.initializeDataset(movie)
                 }

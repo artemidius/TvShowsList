@@ -1,7 +1,6 @@
 package com.tomtom.tom.tvshowslist
 
 import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.action.ViewActions.swipeDown
 import android.support.test.espresso.action.ViewActions.swipeUp
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed

@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
     >
 
-    <!-- include main content -->
     <include layout="@layout/fragment_list_content" />
 
-    <!-- include bottom sheet -->
     <include layout="@layout/bottom_sheet" />
 
 </android.support.design.widget.CoordinatorLayout>

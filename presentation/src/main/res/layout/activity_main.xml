@@ -9,4 +9,6 @@
     android:background="@color/colorPrimaryLight"
     tools:context="com.tomtom.tom.tvshowslist.ui.main.MainActivity">
 
+    <include layout="@layout/toolbar" />
+
 </android.support.constraint.ConstraintLayout>

@@ -73,4 +73,9 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
                 }
                 .show()
     }
+
+    override fun onStop() {
+        super.onStop()
+        presenter.onStop()
+    }
 }
