@@ -10,9 +10,9 @@ import com.squareup.picasso.Picasso
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.ui.detail.MovieDetailsContract
-import kotlinx.android.synthetic.main.item_details.view.*
+import kotlinx.android.synthetic.main.item_details_pager.view.*
 
-class MovieDetailsAdapter(var movies: List<Movie>, val presenter:MovieDetailsContract.Presenter) : RecyclerView.Adapter<MovieDetailsAdapter.ViewHolder>() {
+class DetailsPagerAdapter(var movies: List<Movie>, val presenter:MovieDetailsContract.Presenter) : RecyclerView.Adapter<DetailsPagerAdapter.ViewHolder>() {
 
     val tag = this.javaClass.simpleName
     lateinit var context: Context
@@ -20,7 +20,7 @@ class MovieDetailsAdapter(var movies: List<Movie>, val presenter:MovieDetailsCon
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_details, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_details_pager, parent, false)
         return ViewHolder(view, presenter)
     }
 
@@ -55,7 +55,6 @@ class MovieDetailsAdapter(var movies: List<Movie>, val presenter:MovieDetailsCon
         }
 
         override fun onClick(p0: View?) {
-            presenter.onItemClick(movie)
         }
     }
 

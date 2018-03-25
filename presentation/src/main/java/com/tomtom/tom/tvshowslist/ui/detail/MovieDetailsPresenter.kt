@@ -7,7 +7,6 @@ import com.tomtom.tom.domain.boundaries.Interactor
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.domain.model.MoviesResponse
 import com.tomtom.tom.domain.usecases.DownloadSimilarUseCaseImpl
-import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.application.TvShowsListApplication.Companion.apiKey
 import com.tomtom.tom.tvshowslist.application.TvShowsListApplication.Companion.baseUrl
 import com.tomtom.tom.tvshowslist.base.BasePresenter
@@ -56,12 +55,14 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
             downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
         } else {
             Log.d(tag, "We tried too many times. Download aborted")
-            //TODO: Handle UX for different give-up situations
             view?.onDataUpdate(moviesList)
         }
     }
 
-    override fun onItemClick(movie: Movie?) { }
+    override fun onItemClick(position: Int) {
+        view?.scrollPagerToPosition(position)
+
+    }
 
     override fun downloadNextPage() = downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
 

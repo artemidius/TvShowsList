@@ -9,7 +9,7 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.widget.TextView
-import com.tomtom.tom.tvshowslist.adapters.MovieDetailsAdapter
+import com.tomtom.tom.tvshowslist.adapters.DetailsPagerAdapter
 import com.tomtom.tom.tvshowslist.ui.main.MainActivity
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.instanceOf
@@ -38,7 +38,7 @@ class EspressoTitleTest {
         val showIndex = 3
         val showTitle = mActivityRule.activity.listFragment.adapter.movies[showIndex].original_name
         onView(ViewMatchers.withId(R.id.movies_recycler))
-                .perform(RecyclerViewActions.actionOnItemAtPosition<MovieDetailsAdapter.ViewHolder>(3, click()))
+                .perform(RecyclerViewActions.actionOnItemAtPosition<DetailsPagerAdapter.ViewHolder>(3, click()))
 
         Thread.sleep(1000)
         onView(allOf(instanceOf(TextView::class.java), withParent(withId(R.id.toolbar))))

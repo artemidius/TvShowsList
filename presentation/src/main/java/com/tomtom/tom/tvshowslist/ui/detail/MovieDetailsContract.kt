@@ -7,12 +7,14 @@ import com.tomtom.tom.tvshowslist.base.ActivityLifeCyclePresenter
 interface MovieDetailsContract {
     interface View {
         fun onDataUpdate(movies:List<Movie>)
+        fun scrollPagerToPosition(position: Int)
+
     }
 
     interface Presenter : ActivityLifeCyclePresenter {
         fun onViewCreated()
         fun downloadNextPage()
-        fun onItemClick(movie: Movie?)
+        fun onItemClick(position: Int)
         fun initializeDataset(movie: Movie)
         fun getBaseUrl():String
     }
