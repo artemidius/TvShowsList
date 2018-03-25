@@ -6,6 +6,7 @@
         I know that hardcoding a secret is totally illegal.
         I do it as an exception for a test work
     -->
-
     <string name="api_key">03efca6b44cca9b9ad1f94f8b03250db</string>
+
+    <string name="base_url">https://image.tmdb.org/t/p/w200</string>
 </resources>

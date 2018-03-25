@@ -2,8 +2,8 @@ package com.tomtom.tom.tvshowslist.ui.detail
 
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,30 +11,25 @@ import android.view.View
 import android.view.ViewGroup
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.tvshowslist.R
-import com.tomtom.tom.tvshowslist.adapters.CustomGridLayoutManager
 import com.tomtom.tom.tvshowslist.adapters.MovieDetailsAdapter
 import com.tomtom.tom.tvshowslist.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_list.*
 
 
 class DetailFragment : BaseFragment(), MovieDetailsContract.View {
 
-    val tagg = this.javaClass.simpleName
     var isLoading = false
-
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MovieDetailsAdapter
-    private lateinit var layoutManager: GridLayoutManager
-    private val presenter: MovieDetailsContract.Presenter = MovieDetailsPresenter(this)
+    private lateinit var layoutManager: LinearLayoutManager
+    val presenter: MovieDetailsContract.Presenter = MovieDetailsPresenter(this)
 
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater!!.inflate(R.layout.fragment_detail, container, false)
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater!!.inflate(R.layout.fragment_detail, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler(view!!)
-
         presenter.onViewCreated()
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -43,10 +38,8 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
                 val totalItemCount = layoutManager.getItemCount()
                 val lastVisibleItem:Int = layoutManager.findLastCompletelyVisibleItemPosition()
                 if (!isLoading && totalItemCount <= lastVisibleItem + 3) {
-                    Log.d(tag, "MORe")
                     isLoading = true
                     presenter.downloadNextPage()
-
                 }
             }
         })
@@ -55,15 +48,17 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
     private fun initRecycler(view: View) {
         recyclerView = view.findViewById(R.id.detail_recycler)
         adapter = MovieDetailsAdapter(emptyList(), presenter)
-        layoutManager = CustomGridLayoutManager(view.context,2, 1f)
+        layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = layoutManager
-
         recyclerView.adapter = adapter
+        LinearSnapHelper().attachToRecyclerView(recyclerView)
     }
 
     override fun onDataUpdate(movies: List<Movie>) {
-        Log.d(tag, "Fragment has: ${movies.size}")
+        Log.d(tag, "Detail fragment data updated with ${movies.size} shows")
         isLoading = false
         adapter.updateList(movies)
+
     }
+
 }

@@ -7,11 +7,12 @@ import com.tomtom.tom.domain.boundaries.Interactor
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.domain.model.MoviesResponse
 import com.tomtom.tom.domain.usecases.DownloadMoviesUseCaseImpl
-import com.tomtom.tom.tvshowslist.R
+import com.tomtom.tom.tvshowslist.application.TvShowsListApplication.Companion.apiKey
 import com.tomtom.tom.tvshowslist.base.BasePresenter
+import com.tomtom.tom.tvshowslist.base.Navigator
 
 
-class MoviesListPresenter(listFragment: MoviesListFragment) : BasePresenter(), MoviesListContract.Presenter, Interactor.Presentation {
+class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(), MoviesListContract.Presenter, Interactor.Presentation {
 
     private val tag = this.javaClass.simpleName
     private val view: MoviesListContract.View? = listFragment
@@ -19,19 +20,11 @@ class MoviesListPresenter(listFragment: MoviesListFragment) : BasePresenter(), M
     private val backendInteractor:Interactor.Backend = BackendHelper()
     private val presenter = this
 
-    /*
-    OKAY,
-    I know that hardcoding a secret string is totally illegal.
-    I do it as an exception for the sake of a test work
-    */
-    private val apiKey = context.resources.getString(R.string.api_key)
-
     companion object {
         var currentPage:Int = 0
         var moviesList = mutableListOf<Movie>()
         var downloadRetryCount = 0
         const val maximumDownloadAttemptNumber = 3
-
     }
 
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
@@ -51,13 +44,13 @@ class MoviesListPresenter(listFragment: MoviesListFragment) : BasePresenter(), M
             downloadNextPage()
         } else {
             Log.d(tag, "We tried too many times. Download aborted")
-            //TODO: Handle UX for different give-up situations
             view?.onDataUpdate(moviesList)
         }
     }
 
     override fun onItemClick(movie: Movie?) {
         Log.d(tag, movie?.original_name)
+        listFragment.navigator.navigateTo(Navigator.DETAILS_FRAGMENT, movie)
     }
 
     override fun downloadNextPage()  {
@@ -72,7 +65,6 @@ class MoviesListPresenter(listFragment: MoviesListFragment) : BasePresenter(), M
     }
 
     override fun onCreate()       {  Log.d(tag, "Fragment triggered onResume()")    }
-
     override fun onResume()       {  Log.d(tag, "Fragment triggered onResume()")    }
     override fun onPause()        {  Log.d(tag, "Fragment triggered onPause()")     }
     override fun onDestroy()      {  Log.d(tag, "Fragment triggered onDestroy()")   }

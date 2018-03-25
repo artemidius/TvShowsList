@@ -39,12 +39,18 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
         presenter.onResume()
     }
 
-    override fun navigateTo(fragment: String) {
-        super.navigateTo(fragment)
+    override fun navigateTo(fragment: String, movie: Movie?) {
+        super.navigateTo(fragment, movie)
 
         when (fragment) {
             LIST_FRAGMENT -> addFragment(listFragment)
-            DETAILS_FRAGMENT -> addFragment(detailFragment)
+            DETAILS_FRAGMENT -> {
+                if(movie != null) {
+                    title = movie.original_name
+                    addFragment(detailFragment)
+                    detailFragment.presenter.initializeDataset(movie)
+                }
+            }
             else -> Log.d(this.javaClass.simpleName, "Unknown fragment to navigate")
         }
 
@@ -53,11 +59,23 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
     private fun addFragment(fragment: BaseFragment) {
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragments_container, fragment)
+                .replace(R.id.fragments_container, fragment)
                 .addToBackStack(null)
                 .commit()
     }
 
     override fun onDataUpdate(movies: List<Movie>) {    }
+
+    override fun onBackPressed() {
+
+        val count = fragmentManager.backStackEntryCount
+
+        if (count == 0) {
+            super.onBackPressed()
+        } else {
+            fragmentManager.popBackStack()
+        }
+
+    }
 
 }

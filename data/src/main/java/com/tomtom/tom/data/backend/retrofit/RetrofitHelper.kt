@@ -8,11 +8,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitHelper {
     private var moviesApi: MoviesApi
-    val BASE_URL = "https://api.themoviedb.org/3/"
+    val baseUrl = "https://api.themoviedb.org/3/"
 
     init {
         val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(baseUrl)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -20,4 +20,5 @@ class RetrofitHelper {
     }
 
     fun getPopularMovies(api_key: String, page: String): Single<MoviesResponse> = moviesApi.getPopular(api_key, page)
+    fun getSimilarMovies(id:String, api_key: String, page: String): Single<MoviesResponse> = moviesApi.getSimilar(id, api_key, page)
 }

@@ -13,6 +13,7 @@ interface Interactor {
 
     interface Backend {
         fun downloadMovies(api_key:String, page:String = "1"):Single<MoviesResponse>
+        fun downloadSimilar(id:String, api_key:String, page:String = "1"):Single<MoviesResponse>
     }
 
 }

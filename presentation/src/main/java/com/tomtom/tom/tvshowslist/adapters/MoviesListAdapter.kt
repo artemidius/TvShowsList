@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
-import com.tomtom.tom.data.backend.retrofit.RetrofitHelper
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.ui.list.MoviesListContract

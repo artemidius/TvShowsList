@@ -2,41 +2,42 @@ package com.tomtom.tom.tvshowslist.adapters
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
-import com.tomtom.tom.data.backend.retrofit.RetrofitHelper
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.ui.detail.MovieDetailsContract
-import com.tomtom.tom.tvshowslist.ui.list.MoviesListContract
-import kotlinx.android.synthetic.main.item_show.view.*
+import kotlinx.android.synthetic.main.item_details.view.*
 
 class MovieDetailsAdapter(var movies: List<Movie>, val presenter:MovieDetailsContract.Presenter) : RecyclerView.Adapter<MovieDetailsAdapter.ViewHolder>() {
 
+    val tag = this.javaClass.simpleName
     lateinit var context: Context
-    val baseUrl = "https://image.tmdb.org/t/p/w200"
+    val baseUrl = presenter.getBaseUrl()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_show, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_details, parent, false)
         return ViewHolder(view, presenter)
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-
+        Log.d(tag, "obBindViewHolder")
         holder?.movie = movies[position]
 
         with(movies[position]) {
             if (holder != null) {
+                System.out.println(baseUrl + poster_path)
                 Picasso.with(context)
                         .load(baseUrl + poster_path)
                         .placeholder(R.drawable.ic_movie)
-                        .into(holder.textView.show_image)
+                        .into(holder.textView.detail_image)
 
-                holder.textView.show_title.text = original_name
-                holder.textView.show_vote.text = vote_average.toString()
+                holder.textView.detail_title.text = original_name
+                holder.textView.detail_overview.text = overview
 
             }
         }
@@ -59,6 +60,7 @@ class MovieDetailsAdapter(var movies: List<Movie>, val presenter:MovieDetailsCon
     }
 
     fun updateList(newList: List<Movie>) {
+        Log.d(tag, "Details adapter data udpating with ${newList.size} shows")
         movies = newList
         notifyDataSetChanged()
     }

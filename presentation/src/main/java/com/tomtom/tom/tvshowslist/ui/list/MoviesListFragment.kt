@@ -15,7 +15,7 @@ import com.tomtom.tom.tvshowslist.adapters.CustomGridLayoutManager
 import com.tomtom.tom.tvshowslist.adapters.MoviesListAdapter
 import com.tomtom.tom.tvshowslist.base.BaseFragment
 import kotlinx.android.synthetic.main.bottom_sheet.*
-import kotlinx.android.synthetic.main.fragment_list_main_content.*
+import kotlinx.android.synthetic.main.fragment_list_content.*
 
 class MoviesListFragment : BaseFragment(), MoviesListContract.View {
 

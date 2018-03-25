@@ -1,13 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tomtom.tom.tvshowslist.ui.detail.DetailFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:background="@color/colorPrimaryLight"
+    tools:context="com.tomtom.tom.tvshowslist.ui.list.MoviesListFragment"
+    android:id="@+id/detail_container">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/detail_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal" />
+        />
+
+
 
 </android.support.constraint.ConstraintLayout>

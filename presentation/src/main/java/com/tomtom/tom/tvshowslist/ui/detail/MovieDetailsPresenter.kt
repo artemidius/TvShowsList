@@ -2,29 +2,24 @@ package com.tomtom.tom.tvshowslist.ui.detail
 
 import android.util.Log
 import com.tomtom.tom.data.backend.BackendHelper
-import com.tomtom.tom.domain.boundaries.DownloadMoviesUseCase
+import com.tomtom.tom.domain.boundaries.DownloadSimilarUseCase
 import com.tomtom.tom.domain.boundaries.Interactor
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.domain.model.MoviesResponse
-import com.tomtom.tom.domain.usecases.DownloadMoviesUseCaseImpl
-import com.tomtom.tom.tvshowslist.R
+import com.tomtom.tom.domain.usecases.DownloadSimilarUseCaseImpl
+import com.tomtom.tom.tvshowslist.application.TvShowsListApplication.Companion.apiKey
+import com.tomtom.tom.tvshowslist.application.TvShowsListApplication.Companion.baseUrl
 import com.tomtom.tom.tvshowslist.base.BasePresenter
 
 
-class MovieDetailsPresenter(detailFragment: DetailFragment) : BasePresenter(), MovieDetailsContract.Presenter, Interactor.Presentation {
+class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(), MovieDetailsContract.Presenter, Interactor.Presentation {
 
     private val tag = this.javaClass.simpleName
     private val view: MovieDetailsContract.View? = detailFragment
-    private val downloadMoviesUseCase: DownloadMoviesUseCase = DownloadMoviesUseCaseImpl()
+    private val downloadSimilarUseCase:DownloadSimilarUseCase = DownloadSimilarUseCaseImpl()
     private val backendInteractor:Interactor.Backend = BackendHelper()
     private val presenter = this
-
-    /*
-    OKAY,
-    I know that hardcoding a secret string is totally illegal.
-    I do it as an exception for the sake of a test work
-    */
-    private val apiKey = context.resources.getString(R.string.api_key)
+    private var movieId:String? = null
 
     companion object {
         var currentPage:Int = 0
@@ -33,9 +28,18 @@ class MovieDetailsPresenter(detailFragment: DetailFragment) : BasePresenter(), M
         const val maximumDownloadAttemptNumber = 3
     }
 
+    override fun initializeDataset(movie: Movie) {
+        moviesList.clear()
+        moviesList.add(movie)
+        movieId = movie.id.toString()
+
+        Log.d(tag, "Initializing details for movie: ${movie.original_name}")
+        Log.d(tag, "Data set up for details presenter. ${moviesList.size} movies in the set")
+    }
+
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
 
-        Log.d(tag, "DOWNLOADED: ${response.results.size}")
+        Log.d(tag, "DOWNLOADED: ${response.results.size} shows for detail presenter")
         downloadRetryCount = 0
         currentPage = response.page
         moviesList.addAll(response.results)
@@ -48,7 +52,7 @@ class MovieDetailsPresenter(detailFragment: DetailFragment) : BasePresenter(), M
         if (downloadRetryCount <= maximumDownloadAttemptNumber) {
             downloadRetryCount++
             Log.d(tag, "Retry download. Attempt #$downloadRetryCount")
-            downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
+            downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
         } else {
             Log.d(tag, "We tried too many times. Download aborted")
             //TODO: Handle UX for different give-up situations
@@ -60,12 +64,14 @@ class MovieDetailsPresenter(detailFragment: DetailFragment) : BasePresenter(), M
         Log.d(tag, movie?.original_name)
     }
 
-    override fun downloadNextPage() = downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
+    override fun downloadNextPage() = downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
 
     override fun onViewCreated()  {
         Log.d(tag, "Fragment triggered onViewCreated()")
         downloadNextPage()
     }
+
+    override fun getBaseUrl(): String = baseUrl
 
     override fun onCreate()       {  Log.d(tag, "Fragment triggered onResume()")    }
 

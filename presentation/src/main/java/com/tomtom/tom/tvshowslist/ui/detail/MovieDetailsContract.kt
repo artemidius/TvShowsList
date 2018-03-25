@@ -13,6 +13,8 @@ interface MovieDetailsContract {
         fun onViewCreated()
         fun downloadNextPage()
         fun onItemClick(movie: Movie?)
+        fun initializeDataset(movie: Movie)
+        fun getBaseUrl():String
     }
 
 }
