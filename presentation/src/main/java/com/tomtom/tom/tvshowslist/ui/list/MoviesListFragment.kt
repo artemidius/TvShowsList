@@ -21,8 +21,6 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
 
     var isLoading = false
 
-    lateinit var bottomSheetBehavior:BottomSheetBehavior<View>
-
     private lateinit var recyclerView: RecyclerView
     lateinit var adapter: MoviesListAdapter
     private lateinit var layoutManager: GridLayoutManager
@@ -34,7 +32,7 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
         super.onViewCreated(view, savedInstanceState)
         initRecycler(view!!)
 
-        bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+
         presenter.onViewCreated()
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -45,7 +43,6 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
                 if (!isLoading && totalItemCount <= lastVisibleItem + 3) {
                     isLoading = true
                     presenter.downloadNextPage()
-                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                 }
             }
         })
@@ -60,13 +57,12 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
     }
 
     override fun onDataUpdate(movies: List<Movie>) {
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
         isLoading = false
         adapter.updateList(movies)
     }
 
     override fun onConnectionFailed() {
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         Snackbar.make(list_container, getString(R.string.connection_failed), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(R.string.retry)) {
                     presenter.downloadNextPage()

@@ -1,14 +1,13 @@
 package com.tomtom.tom.tvshowslist.base
 
 
-import android.location.Location
 import android.support.v4.app.Fragment
 
 open class BaseFragment : Fragment() {
-    lateinit var navigator: Navigator
+    lateinit var dispatcher: Dispatcher
 
-    fun setInterface(nav: Navigator){
-        navigator = nav
+    fun setInterface(nav: Dispatcher){
+        dispatcher = nav
     }
 
 }

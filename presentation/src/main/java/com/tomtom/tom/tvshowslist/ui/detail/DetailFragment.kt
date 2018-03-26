@@ -2,8 +2,8 @@ package com.tomtom.tom.tvshowslist.ui.detail
 
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -15,6 +15,7 @@ import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.adapters.DetailsIndicatorAdapter
 import com.tomtom.tom.tvshowslist.adapters.DetailsPagerAdapter
 import com.tomtom.tom.tvshowslist.base.BaseFragment
+import kotlinx.android.synthetic.main.fragment_list_content.*
 
 
 class DetailFragment : BaseFragment(), MovieDetailsContract.View {
@@ -36,39 +37,32 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initPager(view!!)
-        initIndicator(view!!)
+        initIndicator(view)
         presenter.onViewCreated()
 
         pagerRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
-                Log.d(tag, pagerLayoutManager.findFirstVisibleItemPosition().toString())
                 presenter.onPagerSnap(pagerLayoutManager.findFirstVisibleItemPosition())
-
                 val totalItemCount = pagerLayoutManager.getItemCount()
                 val lastVisibleItem: Int = pagerLayoutManager.findLastCompletelyVisibleItemPosition()
-                if (!isLoading && totalItemCount <= lastVisibleItem + 3) {
-                    isLoading = true
-                    presenter.downloadNextPage()
-                }
+                if (!isLoading && totalItemCount <= lastVisibleItem + 3) requestNextPage()
             }
         })
 
         indicatorRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
-                Log.d(tag, indicatorLayoutManager.findFirstVisibleItemPosition().toString())
-
                 val totalItemCount = indicatorLayoutManager.getItemCount()
                 val lastVisibleItem: Int = indicatorLayoutManager.findLastCompletelyVisibleItemPosition()
-                if (!isLoading && totalItemCount <= lastVisibleItem + 3) {
-                    isLoading = true
-                    presenter.downloadNextPage()
-                }
+                if (!isLoading && totalItemCount <= lastVisibleItem + 3) requestNextPage()
             }
         })
+    }
+
+    private fun requestNextPage() {
+        isLoading = true
+        presenter.downloadNextPage()
     }
 
     private fun initPager(view: View) {
@@ -101,4 +95,12 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
         pagerLayoutManager.scrollToPosition(position)
     }
 
+    override fun onConnectionFailed() {
+        isLoading = false
+        Snackbar.make(list_container, getString(R.string.connection_failed), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.retry)) {
+                    requestNextPage()
+                }
+                .show()
+    }
 }

@@ -10,7 +10,7 @@ import com.tomtom.tom.domain.usecases.DownloadMoviesUseCaseImpl
 import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.application.TvShowsListApplication.Companion.apiKey
 import com.tomtom.tom.tvshowslist.base.BasePresenter
-import com.tomtom.tom.tvshowslist.base.Navigator
+import com.tomtom.tom.tvshowslist.base.Dispatcher
 
 
 class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(), MoviesListContract.Presenter, Interactor.Presentation {
@@ -29,12 +29,12 @@ class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(
     }
 
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
-
         Log.d(tag, "DOWNLOADED: ${response.results.size}")
         downloadRetryCount = 0
         currentPage = response.page
         moviesList.addAll(response.results)
         view?.onDataUpdate(moviesList)
+        listFragment.dispatcher.showLoadigProgress(false)
     }
 
     override fun onMoviesPageDownloadFailed(error: Throwable) {
@@ -45,18 +45,21 @@ class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(
             downloadNextPage()
         } else {
             Log.d(tag, "We tried too many times. Download aborted")
+            listFragment.dispatcher.showLoadigProgress(false)
             view?.onDataUpdate(moviesList)
         }
     }
 
     override fun onItemClick(movie: Movie?) {
         Log.d(tag, movie?.original_name)
+        listFragment.dispatcher.showLoadigProgress(false)
         Thread.sleep(500)
-        listFragment.navigator.navigateTo(Navigator.DETAILS_FRAGMENT, movie)
+        listFragment.dispatcher.navigateTo(Dispatcher.DETAILS_FRAGMENT, movie)
     }
 
     override fun downloadNextPage()  {
         if (application.hasInternetAccess()){
+            listFragment.dispatcher.showLoadigProgress(true)
             downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
         } else view?.onConnectionFailed()
     }

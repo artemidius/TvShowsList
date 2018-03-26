@@ -1,22 +1,26 @@
 package com.tomtom.tom.tvshowslist.ui.main
 
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.util.Log
+import android.view.View
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.base.BaseActivity
 import com.tomtom.tom.tvshowslist.base.BaseFragment
-import com.tomtom.tom.tvshowslist.base.Navigator
-import com.tomtom.tom.tvshowslist.base.Navigator.Companion.DETAILS_FRAGMENT
-import com.tomtom.tom.tvshowslist.base.Navigator.Companion.LIST_FRAGMENT
+import com.tomtom.tom.tvshowslist.base.Dispatcher
+import com.tomtom.tom.tvshowslist.base.Dispatcher.Companion.DETAILS_FRAGMENT
+import com.tomtom.tom.tvshowslist.base.Dispatcher.Companion.LIST_FRAGMENT
 import com.tomtom.tom.tvshowslist.ui.detail.DetailFragment
 import com.tomtom.tom.tvshowslist.ui.list.MoviesListFragment
+import kotlinx.android.synthetic.main.bottom_sheet.*
 
-class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
+class MainActivity : BaseActivity(), MainActivityContract.View, Dispatcher {
 
     private var presenter:MainActivityContract.Presenter = MainActivityPresenter(this)
+    lateinit var bottomSheetBehavior:BottomSheetBehavior<View>
 
-    private val navigator: Navigator = this
+    private val dispatcher: Dispatcher = this
     val listFragment = MoviesListFragment()
     val detailFragment = DetailFragment()
 
@@ -24,9 +28,12 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
+        bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
 
-        listFragment.navigator = navigator
-        detailFragment.navigator = navigator
+        showLoadigProgress(false)
+
+        listFragment.dispatcher = dispatcher
+        detailFragment.dispatcher = dispatcher
 
         presenter.onCreate()
 
@@ -64,6 +71,10 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Navigator {
     }
 
     override fun onDataUpdate(movies: List<Movie>) {    }
+
+    override fun showLoadigProgress(visible: Boolean) {
+        bottomSheetBehavior.state =  if(visible) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN
+    }
 
     override fun onBackPressed() {
 

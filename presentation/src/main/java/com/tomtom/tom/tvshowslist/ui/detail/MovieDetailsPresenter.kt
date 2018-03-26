@@ -38,8 +38,8 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
     }
 
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
-
         Log.d(tag, "DOWNLOADED: ${response.results.size} shows for detail presenter")
+        detailFragment.dispatcher.showLoadigProgress(false)
         downloadRetryCount = 0
         currentPage = response.page
         moviesList.addAll(response.results)
@@ -55,6 +55,7 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
             downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
         } else {
             Log.d(tag, "We tried too many times. Download aborted")
+            detailFragment.dispatcher.showLoadigProgress(false)
             view?.onDataUpdate(moviesList)
         }
     }
@@ -69,7 +70,13 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
         detailFragment.activity.title = moviesList[position].original_name
     }
 
-    override fun downloadNextPage() = downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
+    override fun downloadNextPage()  {
+        if (application.hasInternetAccess()){
+        detailFragment.dispatcher.showLoadigProgress(true)
+        downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
+        } else view?.onConnectionFailed()
+    }
+
 
     override fun onViewCreated()  {
         Log.d(tag, "Fragment triggered onViewCreated()")

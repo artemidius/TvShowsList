@@ -8,6 +8,7 @@ interface MovieDetailsContract {
     interface View {
         fun onDataUpdate(movies:List<Movie>)
         fun scrollPagerToPosition(position: Int)
+        fun onConnectionFailed()
 
     }
 
