@@ -11,5 +11,6 @@ interface Dispatcher {
 
     fun navigateTo(fragment:String, movie: Movie? = null)
     fun showLoadigProgress(visible:Boolean)
+    fun onConnectionFailed(presenter: ActivityLifeCyclePresenter)
 
 }

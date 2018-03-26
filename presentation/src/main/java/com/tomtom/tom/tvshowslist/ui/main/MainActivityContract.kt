@@ -9,8 +9,6 @@ interface MainActivityContract {
         fun onDataUpdate(movies:List<Movie>)
     }
 
-    interface Presenter : ActivityLifeCyclePresenter {
-        fun downloadNextPage()
-    }
+    interface Presenter : ActivityLifeCyclePresenter
 
 }

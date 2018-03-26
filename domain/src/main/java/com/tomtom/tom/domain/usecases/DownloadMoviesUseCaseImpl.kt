@@ -1,7 +1,9 @@
 package com.tomtom.tom.domain.usecases
 
+import android.app.RemoteInput
 import com.tomtom.tom.domain.boundaries.DownloadMoviesUseCase
 import com.tomtom.tom.domain.boundaries.Interactor
+import com.tomtom.tom.domain.model.MoviesResponse
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -11,9 +13,13 @@ class DownloadMoviesUseCaseImpl : DownloadMoviesUseCase {
         val nextPage: String = (page + 1).toString()
         val randomDelay = Random().nextInt(1000).toLong() + 500
         backendInteractor.downloadMovies(api_key, nextPage)
-                .doOnError   { presentationInteractor.onMoviesPageDownloadFailed(it) }
-                .doOnSuccess { presentationInteractor.onMoviesPageDownloaded(it)     }
                 .delay(randomDelay, TimeUnit.MILLISECONDS)
-                .subscribe()
+                .subscribe { response: MoviesResponse?, error: Throwable? ->
+
+                    if (error != null) presentationInteractor.onMoviesPageDownloadFailed(error)
+                    else if (response == null) presentationInteractor.onMoviesPageDownloadFailed(Throwable("Response was null"))
+                    else presentationInteractor.onMoviesPageDownloaded(response)
+
+                }
     }
 }

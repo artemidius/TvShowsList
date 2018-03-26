@@ -32,30 +32,23 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
         moviesList.clear()
         moviesList.add(movie)
         movieId = movie.id.toString()
-
-        Log.d(tag, "Initializing details for movie: ${movie.original_name}")
-        Log.d(tag, "Data set up for details presenter. ${moviesList.size} movies in the set")
     }
 
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
-        Log.d(tag, "DOWNLOADED: ${response.results.size} shows for detail presenter")
         detailFragment.dispatcher.showLoadigProgress(false)
         downloadRetryCount = 0
         currentPage = response.page
         moviesList.addAll(response.results)
-
         view?.onDataUpdate(moviesList)
     }
 
     override fun onMoviesPageDownloadFailed(error: Throwable) {
-        Log.d(tag, "Page download failed with error: ${error.message}")
         if (downloadRetryCount <= maximumDownloadAttemptNumber) {
             downloadRetryCount++
-            Log.d(tag, "Retry download. Attempt #$downloadRetryCount")
             downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
         } else {
-            Log.d(tag, "We tried too many times. Download aborted")
             detailFragment.dispatcher.showLoadigProgress(false)
+            detailFragment.dispatcher.onConnectionFailed(this)
             view?.onDataUpdate(moviesList)
         }
     }
@@ -71,15 +64,12 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
     }
 
     override fun downloadNextPage()  {
-        if (application.hasInternetAccess()){
         detailFragment.dispatcher.showLoadigProgress(true)
         downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
-        } else view?.onConnectionFailed()
     }
 
 
     override fun onViewCreated()  {
-        Log.d(tag, "Fragment triggered onViewCreated()")
         detailFragment.activity.title = moviesList[0].original_name
         downloadNextPage()
     }
@@ -87,7 +77,6 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
     override fun getBaseUrl(): String = baseUrl
 
     override fun onCreate()       {  Log.d(tag, "Fragment triggered onResume()")    }
-
     override fun onResume()       {  Log.d(tag, "Fragment triggered onResume()")    }
     override fun onPause()        {  Log.d(tag, "Fragment triggered onPause()")     }
     override fun onDestroy()      {  Log.d(tag, "Fragment triggered onDestroy()")   }

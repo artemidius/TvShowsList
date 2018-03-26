@@ -6,4 +6,5 @@ interface ActivityLifeCyclePresenter {
     fun onPause()
     fun onStop()
     fun onDestroy()
+    fun downloadNextPage()
 }

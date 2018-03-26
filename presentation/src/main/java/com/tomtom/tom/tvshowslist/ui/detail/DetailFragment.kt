@@ -95,12 +95,4 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
         pagerLayoutManager.scrollToPosition(position)
     }
 
-    override fun onConnectionFailed() {
-        isLoading = false
-        Snackbar.make(list_container, getString(R.string.connection_failed), Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.retry)) {
-                    requestNextPage()
-                }
-                .show()
-    }
 }

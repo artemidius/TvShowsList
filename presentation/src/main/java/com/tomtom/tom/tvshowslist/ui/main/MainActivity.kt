@@ -2,10 +2,12 @@ package com.tomtom.tom.tvshowslist.ui.main
 
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.Snackbar
 import android.util.Log
 import android.view.View
 import com.tomtom.tom.domain.model.Movie
 import com.tomtom.tom.tvshowslist.R
+import com.tomtom.tom.tvshowslist.base.ActivityLifeCyclePresenter
 import com.tomtom.tom.tvshowslist.base.BaseActivity
 import com.tomtom.tom.tvshowslist.base.BaseFragment
 import com.tomtom.tom.tvshowslist.base.Dispatcher
@@ -13,7 +15,9 @@ import com.tomtom.tom.tvshowslist.base.Dispatcher.Companion.DETAILS_FRAGMENT
 import com.tomtom.tom.tvshowslist.base.Dispatcher.Companion.LIST_FRAGMENT
 import com.tomtom.tom.tvshowslist.ui.detail.DetailFragment
 import com.tomtom.tom.tvshowslist.ui.list.MoviesListFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.android.synthetic.main.fragment_list_content.*
 
 class MainActivity : BaseActivity(), MainActivityContract.View, Dispatcher {
 
@@ -73,7 +77,17 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Dispatcher {
     override fun onDataUpdate(movies: List<Movie>) {    }
 
     override fun showLoadigProgress(visible: Boolean) {
-        bottomSheetBehavior.state =  if(visible) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN
+        runOnUiThread {
+            bottomSheetBehavior.state = if (visible) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN
+        }
+    }
+
+    override fun onConnectionFailed(presenter:ActivityLifeCyclePresenter) {
+        Snackbar.make(main_host, getString(R.string.connection_failed), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.retry)) {
+                    presenter.downloadNextPage()
+                }
+                .show()
     }
 
     override fun onBackPressed() {

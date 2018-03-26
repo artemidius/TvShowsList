@@ -59,7 +59,9 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
     override fun onDataUpdate(movies: List<Movie>) {
 
         isLoading = false
-        adapter.updateList(movies)
+        activity.runOnUiThread{
+            adapter.updateList(movies)
+        }
     }
 
     override fun onConnectionFailed() {

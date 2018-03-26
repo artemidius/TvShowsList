@@ -8,13 +8,10 @@ interface MovieDetailsContract {
     interface View {
         fun onDataUpdate(movies:List<Movie>)
         fun scrollPagerToPosition(position: Int)
-        fun onConnectionFailed()
-
     }
 
     interface Presenter : ActivityLifeCyclePresenter {
         fun onViewCreated()
-        fun downloadNextPage()
         fun onItemClick(position: Int)
         fun onPagerSnap(position: Int)
         fun initializeDataset(movie: Movie)

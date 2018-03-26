@@ -12,7 +12,6 @@ interface MoviesListContract {
 
     interface Presenter : ActivityLifeCyclePresenter {
         fun onViewCreated()
-        fun downloadNextPage()
         fun onItemClick(movie: Movie?)
     }
 

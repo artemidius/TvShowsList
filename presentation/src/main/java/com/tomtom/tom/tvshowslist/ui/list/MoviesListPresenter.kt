@@ -46,7 +46,9 @@ class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(
         } else {
             Log.d(tag, "We tried too many times. Download aborted")
             listFragment.dispatcher.showLoadigProgress(false)
+            listFragment.dispatcher.onConnectionFailed(this)
             view?.onDataUpdate(moviesList)
+
         }
     }
 
@@ -58,10 +60,8 @@ class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(
     }
 
     override fun downloadNextPage()  {
-        if (application.hasInternetAccess()){
             listFragment.dispatcher.showLoadigProgress(true)
             downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
-        } else view?.onConnectionFailed()
     }
 
     override fun onViewCreated()  {
