@@ -17,42 +17,31 @@ import com.tomtom.tom.tvshowslist.ui.detail.DetailFragment
 import com.tomtom.tom.tvshowslist.ui.list.MoviesListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
-import kotlinx.android.synthetic.main.fragment_list_content.*
 
-class MainActivity : BaseActivity(), MainActivityContract.View, Dispatcher {
+class MainActivity : BaseActivity(), Dispatcher {
 
-    private var presenter:MainActivityContract.Presenter = MainActivityPresenter(this)
-    lateinit var bottomSheetBehavior:BottomSheetBehavior<View>
+    private lateinit var bottomSheetBehavior:BottomSheetBehavior<View>
 
     private val dispatcher: Dispatcher = this
     val listFragment = MoviesListFragment()
-    val detailFragment = DetailFragment()
+    private val detailFragment = DetailFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
-        bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
 
+        bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
         showLoadigProgress(false)
 
         listFragment.dispatcher = dispatcher
         detailFragment.dispatcher = dispatcher
 
-        presenter.onCreate()
-
         navigateTo(LIST_FRAGMENT)
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        presenter.onResume()
     }
 
     override fun navigateTo(fragment: String, movie: Movie?) {
         super.navigateTo(fragment, movie)
-
         when (fragment) {
             LIST_FRAGMENT -> addFragment(listFragment)
             DETAILS_FRAGMENT -> {
@@ -63,7 +52,6 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Dispatcher {
             }
             else -> Log.d(this.javaClass.simpleName, "Unknown fragment to navigate")
         }
-
     }
 
     private fun addFragment(fragment: BaseFragment) {
@@ -73,8 +61,6 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Dispatcher {
                 .addToBackStack(null)
                 .commit()
     }
-
-    override fun onDataUpdate(movies: List<Movie>) {    }
 
     override fun showLoadigProgress(visible: Boolean) {
         runOnUiThread {
@@ -91,15 +77,8 @@ class MainActivity : BaseActivity(), MainActivityContract.View, Dispatcher {
     }
 
     override fun onBackPressed() {
-
         val count = fragmentManager.backStackEntryCount
-
-        if (count == 0) {
-            super.onBackPressed()
-        } else {
-            fragmentManager.popBackStack()
-        }
-
+        if (count == 0) super.onBackPressed()
+        else fragmentManager.popBackStack()
     }
-
 }

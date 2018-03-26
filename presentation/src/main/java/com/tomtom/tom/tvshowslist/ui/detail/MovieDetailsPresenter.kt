@@ -20,6 +20,7 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
     private val backendInteractor:Interactor.Backend = BackendHelper()
     private val presenter = this
     private var movieId:String? = null
+    private var isLoading = false
 
     companion object {
         var currentPage:Int = 0
@@ -35,6 +36,7 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
     }
 
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
+        isLoading = false
         detailFragment.dispatcher.showLoadigProgress(false)
         downloadRetryCount = 0
         currentPage = response.page
@@ -43,6 +45,7 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
     }
 
     override fun onMoviesPageDownloadFailed(error: Throwable) {
+        isLoading = false
         if (downloadRetryCount <= maximumDownloadAttemptNumber) {
             downloadRetryCount++
             downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
@@ -56,14 +59,16 @@ class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(
     override fun onItemClick(position: Int) {
         onPagerSnap(position)
         view?.scrollPagerToPosition(position)
-
     }
 
     override fun onPagerSnap(position: Int) {
+        Log.i(tag, "List size: ${moviesList.size}, position: $position")
         detailFragment.activity.title = moviesList[position].original_name
+        if(position > moviesList.size - 2 && !isLoading) downloadNextPage()
     }
 
     override fun downloadNextPage()  {
+        isLoading = true
         detailFragment.dispatcher.showLoadigProgress(true)
         downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
     }

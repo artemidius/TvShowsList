@@ -36,6 +36,7 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
         presenter.onViewCreated()
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val totalItemCount = layoutManager.itemCount

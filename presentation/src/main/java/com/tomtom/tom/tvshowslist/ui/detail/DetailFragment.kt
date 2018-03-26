@@ -2,7 +2,6 @@ package com.tomtom.tom.tvshowslist.ui.detail
 
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
@@ -15,7 +14,6 @@ import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.adapters.DetailsIndicatorAdapter
 import com.tomtom.tom.tvshowslist.adapters.DetailsPagerAdapter
 import com.tomtom.tom.tvshowslist.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_list_content.*
 
 
 class DetailFragment : BaseFragment(), MovieDetailsContract.View {
@@ -44,16 +42,19 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 presenter.onPagerSnap(pagerLayoutManager.findFirstVisibleItemPosition())
-                val totalItemCount = pagerLayoutManager.getItemCount()
-                val lastVisibleItem: Int = pagerLayoutManager.findLastCompletelyVisibleItemPosition()
-                if (!isLoading && totalItemCount <= lastVisibleItem + 3) requestNextPage()
+//                val totalItemCount = pagerLayoutManager.itemCount
+//                val lastVisibleItem: Int = pagerLayoutManager.findLastCompletelyVisibleItemPosition()
+//                Log.i(tag, "Total: $totalItemCount; Current: $lastVisibleItem")
+//                if (!isLoading && totalItemCount <= lastVisibleItem + 1) requestNextPage()
             }
         })
+
+
 
         indicatorRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val totalItemCount = indicatorLayoutManager.getItemCount()
+                val totalItemCount = indicatorLayoutManager.itemCount
                 val lastVisibleItem: Int = indicatorLayoutManager.findLastCompletelyVisibleItemPosition()
                 if (!isLoading && totalItemCount <= lastVisibleItem + 3) requestNextPage()
             }
