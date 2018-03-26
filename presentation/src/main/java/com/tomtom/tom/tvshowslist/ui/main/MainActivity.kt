@@ -43,7 +43,7 @@ class MainActivity : BaseActivity(), Dispatcher {
     override fun navigateTo(fragment: String, movie: Movie?) {
         super.navigateTo(fragment, movie)
         when (fragment) {
-            LIST_FRAGMENT -> addFragment(listFragment)
+            LIST_FRAGMENT -> addFragment(listFragment, false)
             DETAILS_FRAGMENT -> {
                 if(movie != null) {
                     addFragment(detailFragment)
@@ -54,12 +54,9 @@ class MainActivity : BaseActivity(), Dispatcher {
         }
     }
 
-    private fun addFragment(fragment: BaseFragment) {
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragments_container, fragment)
-                .addToBackStack(null)
-                .commit()
+    private fun addFragment(fragment: BaseFragment, addToBack:Boolean = true) {
+        if(addToBack) supportFragmentManager.beginTransaction().replace(R.id.fragments_container, fragment).addToBackStack(null).commit()
+        else supportFragmentManager.beginTransaction().replace(R.id.fragments_container, fragment).commit()
     }
 
     override fun showLoadigProgress(visible: Boolean) {
@@ -69,11 +66,9 @@ class MainActivity : BaseActivity(), Dispatcher {
     }
 
     override fun onConnectionFailed(presenter:ActivityLifeCyclePresenter) {
-        Snackbar.make(main_host, getString(R.string.connection_failed), Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.retry)) {
+        Snackbar.make(main_host, getString(R.string.connection_failed), Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.retry)) {
                     presenter.downloadNextPage()
-                }
-                .show()
+                }.show()
     }
 
     override fun onBackPressed() {

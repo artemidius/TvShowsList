@@ -12,7 +12,7 @@ import com.tomtom.tom.tvshowslist.application.TvShowsListApplication.Companion.b
 import com.tomtom.tom.tvshowslist.base.BasePresenter
 
 
-class MovieDetailsPresenter(val detailFragment: DetailFragment) : BasePresenter(), MovieDetailsContract.Presenter, Interactor.Presentation {
+class MovieDetailsPresenter(private val detailFragment: DetailFragment) : BasePresenter(), MovieDetailsContract.Presenter, Interactor.Presentation {
 
     private val tag = this.javaClass.simpleName
     private val view: MovieDetailsContract.View? = detailFragment

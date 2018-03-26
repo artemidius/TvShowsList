@@ -42,14 +42,8 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 presenter.onPagerSnap(pagerLayoutManager.findFirstVisibleItemPosition())
-//                val totalItemCount = pagerLayoutManager.itemCount
-//                val lastVisibleItem: Int = pagerLayoutManager.findLastCompletelyVisibleItemPosition()
-//                Log.i(tag, "Total: $totalItemCount; Current: $lastVisibleItem")
-//                if (!isLoading && totalItemCount <= lastVisibleItem + 1) requestNextPage()
             }
         })
-
-
 
         indicatorRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
