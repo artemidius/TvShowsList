@@ -73,7 +73,6 @@ class MovieDetailsPresenter(private val detailFragment: DetailFragment) : BasePr
         downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
     }
 
-
     override fun onViewCreated()  {
         detailFragment.activity.title = moviesList[0].original_name
         downloadNextPage()

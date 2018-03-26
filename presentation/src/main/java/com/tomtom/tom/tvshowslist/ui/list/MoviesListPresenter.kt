@@ -13,7 +13,7 @@ import com.tomtom.tom.tvshowslist.base.BasePresenter
 import com.tomtom.tom.tvshowslist.base.Dispatcher
 
 
-class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(), MoviesListContract.Presenter, Interactor.Presentation {
+class MoviesListPresenter(private val listFragment: MoviesListFragment) : BasePresenter(), MoviesListContract.Presenter, Interactor.Presentation {
 
     private val tag = this.javaClass.simpleName
     private val view: MoviesListContract.View? = listFragment
@@ -48,7 +48,6 @@ class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(
             listFragment.dispatcher.showLoadigProgress(false)
             listFragment.dispatcher.onConnectionFailed(this)
             view?.onDataUpdate(moviesList)
-
         }
     }
 
@@ -67,7 +66,8 @@ class MoviesListPresenter(val listFragment: MoviesListFragment) : BasePresenter(
     override fun onViewCreated()  {
         Log.d(tag, "Fragment triggered onViewCreated()")
         listFragment.activity.title = context.getString(R.string.list_screen_title)
-        downloadNextPage()
+        if (moviesList.size < 20) downloadNextPage()
+        else view?.onDataUpdate(moviesList)
     }
 
     override fun onCreate()       {  Log.d(tag, "Fragment triggered onResume()")    }

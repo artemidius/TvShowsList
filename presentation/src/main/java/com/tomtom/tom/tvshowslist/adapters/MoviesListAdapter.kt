@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_show.view.*
 class MoviesListAdapter(var movies: List<Movie>, val presenter:MoviesListContract.Presenter) : RecyclerView.Adapter<MoviesListAdapter.ViewHolder>() {
 
     lateinit var context: Context
-    val baseUrl = "https://image.tmdb.org/t/p/w200"
+    private val baseUrl = "https://image.tmdb.org/t/p/w200"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
@@ -32,14 +32,11 @@ class MoviesListAdapter(var movies: List<Movie>, val presenter:MoviesListContrac
                         .load(baseUrl + poster_path)
                         .placeholder(R.drawable.ic_movie)
                         .into(holder.textView.show_image)
-
                 holder.textView.show_title.text = original_name
                 holder.textView.show_vote.text = vote_average.toString()
-
             }
         }
     }
-
 
     override fun getItemCount(): Int = movies.size
 
@@ -47,18 +44,13 @@ class MoviesListAdapter(var movies: List<Movie>, val presenter:MoviesListContrac
 
         var movie:Movie? = null
 
-        init {
-            textView.setOnClickListener (this)
-        }
+        init { textView.setOnClickListener (this) }
 
-        override fun onClick(p0: View?) {
-            presenter.onItemClick(movie)
-        }
+        override fun onClick(p0: View?) { presenter.onItemClick(movie) }
     }
 
     fun updateList(newList: List<Movie>) {
         movies = newList
         notifyDataSetChanged()
     }
-
 }

@@ -18,8 +18,6 @@ import com.tomtom.tom.tvshowslist.base.BaseFragment
 
 class DetailFragment : BaseFragment(), MovieDetailsContract.View {
 
-    var isLoading = false
-
     private lateinit var pagerRecycler: RecyclerView
     private lateinit var pagerPagerAdapter: DetailsPagerAdapter
     private lateinit var pagerLayoutManager: LinearLayoutManager
@@ -27,6 +25,9 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
     private lateinit var indicatorRecycler: RecyclerView
     private lateinit var indicatorPagerAdapter: DetailsIndicatorAdapter
     private lateinit var indicatorLayoutManager: LinearLayoutManager
+
+    var isLoading = false
+
     val presenter: MovieDetailsContract.Presenter = MovieDetailsPresenter(this)
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -89,5 +90,4 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
     override fun scrollPagerToPosition(position: Int) {
         pagerLayoutManager.scrollToPosition(position)
     }
-
 }

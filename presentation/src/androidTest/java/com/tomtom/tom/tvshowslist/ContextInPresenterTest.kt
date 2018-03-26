@@ -2,6 +2,8 @@ package com.tomtom.tom.tvshowslist
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
+import com.tomtom.tom.tvshowslist.ui.list.MoviesListFragment
+import com.tomtom.tom.tvshowslist.ui.list.MoviesListPresenter
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,7 +15,7 @@ class ContextInPresenterTest {
     @Throws(Exception::class)
     fun testContext() {
         val appContext = InstrumentationRegistry.getTargetContext()
-        val presenterContext = MainActivityPresenter(null).context
+        val presenterContext = MoviesListPresenter(MoviesListFragment()).context
         assertEquals(presenterContext.packageName, appContext.packageName)
     }
 }

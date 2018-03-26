@@ -11,8 +11,6 @@ open class BasePresenter {
     @Inject
     lateinit var application: TvShowsListApplication
 
-    val TAG = this.javaClass.simpleName
-
     init {
         TvShowsListApplication.appComponent.inject(this)
     }

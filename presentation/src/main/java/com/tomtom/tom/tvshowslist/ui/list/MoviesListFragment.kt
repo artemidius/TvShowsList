@@ -2,8 +2,6 @@ package com.tomtom.tom.tvshowslist.ui.list
 
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -14,8 +12,6 @@ import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.adapters.CustomGridLayoutManager
 import com.tomtom.tom.tvshowslist.adapters.MoviesListAdapter
 import com.tomtom.tom.tvshowslist.base.BaseFragment
-import kotlinx.android.synthetic.main.bottom_sheet.*
-import kotlinx.android.synthetic.main.fragment_list_content.*
 
 class MoviesListFragment : BaseFragment(), MoviesListContract.View {
 
@@ -31,7 +27,6 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler(view!!)
-
 
         presenter.onViewCreated()
 
@@ -58,23 +53,9 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
     }
 
     override fun onDataUpdate(movies: List<Movie>) {
-
         isLoading = false
         activity.runOnUiThread{
             adapter.updateList(movies)
         }
-    }
-
-    override fun onConnectionFailed() {
-        Snackbar.make(list_container, getString(R.string.connection_failed), Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.retry)) {
-                    presenter.downloadNextPage()
-                }
-                .show()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        presenter.onStop()
     }
 }

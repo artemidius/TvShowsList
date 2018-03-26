@@ -2,7 +2,6 @@ package com.tomtom.tom.tvshowslist.adapters
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,21 +11,18 @@ import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.ui.detail.MovieDetailsContract
 import kotlinx.android.synthetic.main.item_details_pager.view.*
 
-class DetailsIndicatorAdapter(var movies: List<Movie>, val presenter:MovieDetailsContract.Presenter) : RecyclerView.Adapter<DetailsIndicatorAdapter.ViewHolder>() {
+class DetailsIndicatorAdapter(private var movies: List<Movie>, val presenter:MovieDetailsContract.Presenter) : RecyclerView.Adapter<DetailsIndicatorAdapter.ViewHolder>() {
 
-    val tag = this.javaClass.simpleName
     lateinit var context: Context
-    val baseUrl = presenter.getBaseUrl()
+    private val baseUrl = presenter.getBaseUrl()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
-
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_details_indicator, parent, false)
         return ViewHolder(view, presenter)
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        Log.d(tag, "obBindViewHolder")
         holder?.pos = position
 
         with(movies[position]) {
@@ -40,7 +36,6 @@ class DetailsIndicatorAdapter(var movies: List<Movie>, val presenter:MovieDetail
         }
     }
 
-
     override fun getItemCount(): Int = movies.size
 
     class ViewHolder(val textView: View, val presenter:MovieDetailsContract.Presenter) : RecyclerView.ViewHolder(textView), View.OnClickListener {
@@ -50,9 +45,7 @@ class DetailsIndicatorAdapter(var movies: List<Movie>, val presenter:MovieDetail
     }
 
     fun updateList(newList: List<Movie>) {
-        Log.d(tag, "Details adapter data udpating with ${newList.size} shows")
         movies = newList
         notifyDataSetChanged()
     }
-
 }
