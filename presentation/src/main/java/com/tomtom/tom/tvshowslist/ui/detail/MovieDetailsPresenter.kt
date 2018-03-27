@@ -16,14 +16,15 @@ class MovieDetailsPresenter(private val detailFragment: DetailFragment) : BasePr
 
     private val tag = this.javaClass.simpleName
     private val view: MovieDetailsContract.View? = detailFragment
-    private val downloadSimilarUseCase:DownloadSimilarUseCase = DownloadSimilarUseCaseImpl()
-    private val backendInteractor:Interactor.Backend = BackendHelper()
+    private val downloadSimilarUseCase: DownloadSimilarUseCase = DownloadSimilarUseCaseImpl()
+    private val backendInteractor: Interactor.Backend = BackendHelper()
     private val presenter = this
-    private var movieId:String? = null
+    private var movieId: String? = null
     private var isLoading = false
+    private var fragmentIsActive = false
 
     companion object {
-        var currentPage:Int = 0
+        var currentPage: Int = 0
         var moviesList = mutableListOf<Movie>()
         var downloadRetryCount = 0
         const val maximumDownloadAttemptNumber = 3
@@ -37,11 +38,19 @@ class MovieDetailsPresenter(private val detailFragment: DetailFragment) : BasePr
 
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
         isLoading = false
-        detailFragment.dispatcher.showLoadigProgress(false)
         downloadRetryCount = 0
         currentPage = response.page
         moviesList.addAll(response.results)
-        view?.onDataUpdate(moviesList)
+        updateUI()
+    }
+
+    private fun updateUI() {
+        if (fragmentIsActive) {
+            detailFragment.activity.runOnUiThread {
+                detailFragment.dispatcher.showLoadigProgress(false)
+                view?.onDataUpdate(moviesList)
+            }
+        }
     }
 
     override fun onMoviesPageDownloadFailed(error: Throwable) {
@@ -50,9 +59,8 @@ class MovieDetailsPresenter(private val detailFragment: DetailFragment) : BasePr
             downloadRetryCount++
             downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
         } else {
-            detailFragment.dispatcher.showLoadigProgress(false)
             detailFragment.dispatcher.onConnectionFailed(this)
-            view?.onDataUpdate(moviesList)
+            updateUI()
         }
     }
 
@@ -62,28 +70,43 @@ class MovieDetailsPresenter(private val detailFragment: DetailFragment) : BasePr
     }
 
     override fun onPagerSnap(position: Int) {
-        Log.i(tag, "List size: ${moviesList.size}, position: $position")
         detailFragment.activity.title = moviesList[position].original_name
-        if(position > moviesList.size - 2 && !isLoading) downloadNextPage()
+        if (position > moviesList.size - 2 && !isLoading) downloadNextPage()
     }
 
-    override fun downloadNextPage()  {
+    override fun downloadNextPage() {
         isLoading = true
         detailFragment.dispatcher.showLoadigProgress(true)
         downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
     }
 
-    override fun onViewCreated()  {
+    override fun onViewCreated() {
+        fragmentIsActive = true
         detailFragment.activity.title = moviesList[0].original_name
         downloadNextPage()
     }
 
     override fun getBaseUrl(): String = baseUrl
 
-    override fun onCreate()       {  Log.d(tag, "Fragment triggered onResume()")    }
-    override fun onResume()       {  Log.d(tag, "Fragment triggered onResume()")    }
-    override fun onPause()        {  Log.d(tag, "Fragment triggered onPause()")     }
-    override fun onDestroy()      {  Log.d(tag, "Fragment triggered onDestroy()")   }
-    override fun onStop()         {  Log.d(tag, "Fragment triggered onStop()")      }
+    override fun onStop() {
+        fragmentIsActive = false
+    }
+
+    override fun onCreate() {
+        Log.d(tag, "Fragment triggered onResume()")
+    }
+
+    override fun onResume() {
+        Log.d(tag, "Fragment triggered onResume()")
+    }
+
+    override fun onPause() {
+        Log.d(tag, "Fragment triggered onPause()")
+    }
+
+    override fun onDestroy() {
+        Log.d(tag, "Fragment triggered onDestroy()")
+    }
+
 }
 

@@ -20,6 +20,7 @@ class MoviesListPresenter(private val listFragment: MoviesListFragment) : BasePr
     private val downloadMoviesUseCase: DownloadMoviesUseCase = DownloadMoviesUseCaseImpl()
     private val backendInteractor:Interactor.Backend = BackendHelper()
     private val presenter = this
+    var fragmentIsActive = false
 
     companion object {
         var currentPage:Int = 0
@@ -29,12 +30,19 @@ class MoviesListPresenter(private val listFragment: MoviesListFragment) : BasePr
     }
 
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
-        Log.d(tag, "DOWNLOADED: ${response.results.size}")
         downloadRetryCount = 0
         currentPage = response.page
         moviesList.addAll(response.results)
-        view?.onDataUpdate(moviesList)
-        listFragment.dispatcher.showLoadigProgress(false)
+        updateUI()
+    }
+
+    private fun updateUI() {
+        if (fragmentIsActive) {
+            listFragment.activity.runOnUiThread {
+                listFragment.dispatcher.showLoadigProgress(false)
+                view?.onDataUpdate(moviesList)
+            }
+        }
     }
 
     override fun onMoviesPageDownloadFailed(error: Throwable) {
@@ -46,8 +54,7 @@ class MoviesListPresenter(private val listFragment: MoviesListFragment) : BasePr
         } else {
             Log.d(tag, "We tried too many times. Download aborted")
             listFragment.dispatcher.showLoadigProgress(false)
-            listFragment.dispatcher.onConnectionFailed(this)
-            view?.onDataUpdate(moviesList)
+            updateUI()
         }
     }
 
@@ -64,7 +71,7 @@ class MoviesListPresenter(private val listFragment: MoviesListFragment) : BasePr
     }
 
     override fun onViewCreated()  {
-        Log.d(tag, "Fragment triggered onViewCreated()")
+        fragmentIsActive = true
         listFragment.activity.title = context.getString(R.string.list_screen_title)
         if (moviesList.size < 20) downloadNextPage()
         else view?.onDataUpdate(moviesList)
@@ -74,7 +81,7 @@ class MoviesListPresenter(private val listFragment: MoviesListFragment) : BasePr
     override fun onResume()       {  Log.d(tag, "Fragment triggered onResume()")    }
     override fun onPause()        {  Log.d(tag, "Fragment triggered onPause()")     }
     override fun onDestroy()      {  Log.d(tag, "Fragment triggered onDestroy()")   }
-    override fun onStop()         {  Log.d(tag, "Fragment triggered onStop()")      }
+    override fun onStop()         {  fragmentIsActive = false   }
 
 }
 

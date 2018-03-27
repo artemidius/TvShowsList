@@ -82,13 +82,16 @@ class DetailFragment : BaseFragment(), MovieDetailsContract.View {
     override fun onDataUpdate(movies: List<Movie>) {
         Log.d(tag, "Detail fragment data updated with ${movies.size} shows")
         isLoading = false
-        activity?.runOnUiThread {
-            pagerPagerAdapter.updateList(movies)
-            indicatorPagerAdapter.updateList(movies)
-        }
+        pagerPagerAdapter.updateList(movies)
+        indicatorPagerAdapter.updateList(movies)
     }
 
     override fun scrollPagerToPosition(position: Int) {
         pagerLayoutManager.scrollToPosition(position)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        presenter.onStop()
     }
 }

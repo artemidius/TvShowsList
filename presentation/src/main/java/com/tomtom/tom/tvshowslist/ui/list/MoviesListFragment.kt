@@ -54,8 +54,13 @@ class MoviesListFragment : BaseFragment(), MoviesListContract.View {
 
     override fun onDataUpdate(movies: List<Movie>) {
         isLoading = false
-        activity.runOnUiThread{
+        activity.runOnUiThread {
             adapter.updateList(movies)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        presenter.onStop()
     }
 }
