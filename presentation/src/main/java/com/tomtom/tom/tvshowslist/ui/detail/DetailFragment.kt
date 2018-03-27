@@ -19,11 +19,11 @@ import com.tomtom.tom.tvshowslist.base.BaseFragment
 class DetailFragment : BaseFragment(), MovieDetailsContract.View {
 
     private lateinit var pagerRecycler: RecyclerView
-    private lateinit var pagerPagerAdapter: DetailsPagerAdapter
+    lateinit var pagerPagerAdapter: DetailsPagerAdapter
     private lateinit var pagerLayoutManager: LinearLayoutManager
 
     private lateinit var indicatorRecycler: RecyclerView
-    private lateinit var indicatorPagerAdapter: DetailsIndicatorAdapter
+    lateinit var indicatorPagerAdapter: DetailsIndicatorAdapter
     private lateinit var indicatorLayoutManager: LinearLayoutManager
 
     var isLoading = false

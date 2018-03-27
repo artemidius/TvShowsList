@@ -11,7 +11,7 @@ import com.tomtom.tom.tvshowslist.R
 import com.tomtom.tom.tvshowslist.ui.detail.MovieDetailsContract
 import kotlinx.android.synthetic.main.item_details_pager.view.*
 
-class DetailsIndicatorAdapter(private var movies: List<Movie>, val presenter:MovieDetailsContract.Presenter) : RecyclerView.Adapter<DetailsIndicatorAdapter.ViewHolder>() {
+class DetailsIndicatorAdapter(var movies: List<Movie>, val presenter:MovieDetailsContract.Presenter) : RecyclerView.Adapter<DetailsIndicatorAdapter.ViewHolder>() {
 
     lateinit var context: Context
     private val baseUrl = presenter.getBaseUrl()

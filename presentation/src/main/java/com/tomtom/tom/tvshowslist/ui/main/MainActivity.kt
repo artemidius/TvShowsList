@@ -24,7 +24,7 @@ class MainActivity : BaseActivity(), Dispatcher {
 
     private val dispatcher: Dispatcher = this
     val listFragment = MoviesListFragment()
-    private val detailFragment = DetailFragment()
+    val detailFragment = DetailFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
