@@ -27,7 +27,6 @@ class MovieDetailsPresenter(private val detailFragment: DetailFragment) : BasePr
         var currentPage: Int = 0
         var moviesList = mutableListOf<Movie>()
         var downloadRetryCount = 0
-        const val maximumDownloadAttemptNumber = 3
     }
 
     override fun initializeDataset(movie: Movie) {
@@ -55,13 +54,8 @@ class MovieDetailsPresenter(private val detailFragment: DetailFragment) : BasePr
 
     override fun onMoviesPageDownloadFailed(error: Throwable) {
         isLoading = false
-        if (downloadRetryCount <= maximumDownloadAttemptNumber) {
-            downloadRetryCount++
-            downloadSimilarUseCase.run(apiKey, currentPage, movieId!!, backendInteractor, presenter)
-        } else {
-            detailFragment.dispatcher.onConnectionFailed(this)
-            updateUI()
-        }
+        detailFragment.dispatcher.onConnectionFailed(this)
+        updateUI()
     }
 
     override fun onItemClick(position: Int) {
@@ -88,25 +82,10 @@ class MovieDetailsPresenter(private val detailFragment: DetailFragment) : BasePr
 
     override fun getBaseUrl(): String = baseUrl
 
-    override fun onStop() {
-        fragmentIsActive = false
-    }
-
-    override fun onCreate() {
-        Log.d(tag, "Fragment triggered onResume()")
-    }
-
-    override fun onResume() {
-        Log.d(tag, "Fragment triggered onResume()")
-    }
-
-    override fun onPause() {
-        Log.d(tag, "Fragment triggered onPause()")
-    }
-
-    override fun onDestroy() {
-        Log.d(tag, "Fragment triggered onDestroy()")
-    }
+    override fun onStop()         { fragmentIsActive = false                             }
+    override fun onCreate()       {  Log.d(tag, "Fragment triggered onResume()")    }
+    override fun onResume()       {  Log.d(tag, "Fragment triggered onResume()")    }
+    override fun onPause()        {  Log.d(tag, "Fragment triggered onPause()")     }
+    override fun onDestroy()      {  Log.d(tag, "Fragment triggered onDestroy()")   }
 
 }
-

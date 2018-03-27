@@ -18,15 +18,14 @@ class MoviesListPresenter(private val listFragment: MoviesListFragment) : BasePr
     private val tag = this.javaClass.simpleName
     private val view: MoviesListContract.View? = listFragment
     private val downloadMoviesUseCase: DownloadMoviesUseCase = DownloadMoviesUseCaseImpl()
-    private val backendInteractor:Interactor.Backend = BackendHelper()
+    private val backendInteractor: Interactor.Backend = BackendHelper()
     private val presenter = this
-    var fragmentIsActive = false
+    private var fragmentIsActive = false
 
     companion object {
-        var currentPage:Int = 0
+        var currentPage: Int = 0
         var moviesList = mutableListOf<Movie>()
         var downloadRetryCount = 0
-        const val maximumDownloadAttemptNumber = 3
     }
 
     override fun onMoviesPageDownloaded(response: MoviesResponse) {
@@ -46,31 +45,22 @@ class MoviesListPresenter(private val listFragment: MoviesListFragment) : BasePr
     }
 
     override fun onMoviesPageDownloadFailed(error: Throwable) {
-        Log.d(tag, "Page download failed with error: ${error.message}")
-        if (downloadRetryCount <= maximumDownloadAttemptNumber) {
-            downloadRetryCount++
-            Log.d(tag, "Retry download. Attempt #$downloadRetryCount")
-            downloadNextPage()
-        } else {
-            Log.d(tag, "We tried too many times. Download aborted")
-            listFragment.dispatcher.showLoadigProgress(false)
-            updateUI()
-        }
+        listFragment.dispatcher.onConnectionFailed(this)
+        listFragment.dispatcher.showLoadigProgress(false)
+        updateUI()
     }
 
     override fun onItemClick(movie: Movie?) {
-        Log.d(tag, movie?.original_name)
         listFragment.dispatcher.showLoadigProgress(false)
-        Thread.sleep(500)
         listFragment.dispatcher.navigateTo(Dispatcher.DETAILS_FRAGMENT, movie)
     }
 
-    override fun downloadNextPage()  {
-            listFragment.dispatcher.showLoadigProgress(true)
-            downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
+    override fun downloadNextPage() {
+        listFragment.dispatcher.showLoadigProgress(true)
+        downloadMoviesUseCase.run(apiKey, currentPage, backendInteractor, presenter)
     }
 
-    override fun onViewCreated()  {
+    override fun onViewCreated() {
         fragmentIsActive = true
         listFragment.activity.title = context.getString(R.string.list_screen_title)
         if (moviesList.size < 20) downloadNextPage()
@@ -81,7 +71,6 @@ class MoviesListPresenter(private val listFragment: MoviesListFragment) : BasePr
     override fun onResume()       {  Log.d(tag, "Fragment triggered onResume()")    }
     override fun onPause()        {  Log.d(tag, "Fragment triggered onPause()")     }
     override fun onDestroy()      {  Log.d(tag, "Fragment triggered onDestroy()")   }
-    override fun onStop()         {  fragmentIsActive = false   }
-
+    override fun onStop()         {  fragmentIsActive = false                            }
 }
 
