@@ -96,7 +96,7 @@ class EspressoBigValidationTest {
 
        //check that activity is alive
         Thread.sleep(1000)
-        onView(withId(R.id.fragments_container)).check(matches(isDisplayed()))
+
 
     }
 }
